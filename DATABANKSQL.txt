@@ -1,0 +1,16 @@
+Select count(distinct node_id) from customer_nodes;
+mysql> Select count(node_id),region_id from customer_nodes group by region_id;
+
+mysql> Select count(customer_id),region_id from customer_nodes group by region_id;
+
+mysql> Select avg(s) from(Select sum(end_date-start_date) s,node_id,customer_id from customer_nodes group by cust
+omer_id,node_id)c;
+
+
+
+mysql> select txn_type,count(distinct customer_id),sum(txn_amount) from customer_transactions group by txn_type;
+
+mysql> select avg(c1),avg(s1) from(select txn_type,count(customer_id) c1,avg(txn_amount) s1 from customer_transac
+tions where txn_type="deposit" group by customer_id) t;
+
+mysql> Select count(customer_id),mth from(SELECT customer_id, MONTH(txn_date) AS mth, SUM(CASE WHEN txn_type = 'deposit' THEN 0 ELSE 1 END) AS deposit_count, SUM(CASE WHEN txn_type = 'purchase' THEN 0 ELSE 1 END) AS purchase_count, SUM(CASE WHEN txn_type = 'withdrawal' THEN 1 ELSE 0 END) AS withdrawal_count FROM customer_transactions GROUP BY customer_id, MONTH(txn_date)) t1 where deposit_count>1 and (purchase_count>=1 or withdrawal_count>=1) group by mth;
