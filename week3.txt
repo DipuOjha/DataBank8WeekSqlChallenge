@@ -1,0 +1,23 @@
+How many customers have upgraded to an annual plan in 2020?
+mysql> select plans.plan_id,count(distinct customer_id) from plans join subscriptions on plans.plan_id=subscriptions.plan_id where year(start_date)=2020 and plans.plan_id=3 group by plans.plan_id;
+
+What is the customer count and percentage breakdown of all 5 plan_name values at 2020-12-31?
+mysql> select plans.plan_id,count(distinct customer_id) from plans join subscriptions on plans.plan_id=subscriptions.plan_id where year(start_date)<2021 group by plans.plan_id;
+
+How many customers have churned straight after their initial free trial - what percentage is this rounded to the nearest whole number?
+mysql> select  count(distinct s1.customer_id) from subscriptions s1 join subscriptions s2 on s1.start_date=s2.start_date
+-7 and s1.plan_id=0 and s2.plan_id=4;
+
+What is the number and percentage of customer plans after their initial free trial?
+mysql> select plans.plan_id,count(distinct customer_id) from plans join subscriptions on plans.plan_id=subscriptions.pla
+n_id where plans.plan_id<>0 group by plans.plan_id;
+
+What plan start_date values occur after the year 2020 for our dataset? Show the breakdown by count of events for each plan_name
+mysql> select plans.plan_name,count(plan_name) from plans join subscriptions on plans.plan_id=subscriptions.plan_id where year(start_date)>2020 group by plan_name;
+
+What is the monthly distribution of trial plan start_date values for our dataset - use the start of the month as the group by value
+mysql> select month(start_date) as month,count(plans.plan_id) as distribution from plans join subscriptions where plans.plan_id=subscriptions.plan_id and plans.plan_id=0 group by month(start_date);
+
+
+How many customers has Foodie-Fi ever had?
+mysql> select count(distinct customer_id) from subscriptions;
